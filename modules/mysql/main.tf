@@ -1,9 +1,9 @@
-
 # Define volume for MariaDB
 resource "docker_volume" "db_data" {
   name = "db-data"
 }
 
+# Define container master
 resource "docker_container" "mariadb_master" {
   name  = "mariadb-master"
   image = "mariadb:11.4"
@@ -13,11 +13,6 @@ resource "docker_container" "mariadb_master" {
     internal = 3306
     external = 3306
   }
-
-#   volumes {
-#     host_path      = "${abspath(path.module)}/db-data-master"
-#     container_path = "/var/lib/mysql"
-#   }
 
   env = [
     "MARIADB_ROOT_PASSWORD=${var.db_passwd}",
@@ -51,6 +46,7 @@ resource "docker_container" "mariadb_master" {
   }
 }
 
+# Define container slave
 resource "docker_container" "mariadb_slave" {
   name  = "mariadb-slave"
   image = "mariadb:11.4"
@@ -61,10 +57,6 @@ resource "docker_container" "mariadb_slave" {
     external = 3307
   }
 
-#   volumes {
-#     host_path      = "${abspath(path.module)}/db-data-slave"
-#     container_path = "/var/lib/mysql"
-#   }
 
   env = [
     "MARIADB_ROOT_PASSWORD=${var.db_passwd}",
@@ -103,40 +95,3 @@ resource "docker_container" "mariadb_slave" {
     start_period = "30s"
   }
 }
-
-
-
-
-# Define the MariaDB container
-# resource "docker_container" "mariadb" {
-#   name  = "mariadb"
-#   image = "mariadb:11.4"
-#   restart = "unless-stopped"
-
-#   ports {
-#     internal = 3306
-#     external = 3306
-#   }
-
-#   volumes {
-#     volume_name    = docker_volume.db_data.name
-#     container_path = "/var/lib/mysql"
-#   }
-
-#   env = [
-#     "MARIADB_ROOT_PASSWORD=${var.db_passwd}",
-#     "MARIADB_DATABASE=${var.db_name}",
-#   ]
-
-#   healthcheck {
-#     test = ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-#     start_period = "10s"
-#     interval     = "5s"
-#     timeout      = "1s"
-#     retries      = 3
-#   }
-
-#   networks_advanced {
-#     name = docker_network.prestashop_network.name
-#   }
-# }

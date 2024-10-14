@@ -1,4 +1,3 @@
-
 # création du volume commun
 resource "docker_volume" "prestashop_data" {
   name = "${var.container_name_prefix}-prestashop_data"

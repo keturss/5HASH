@@ -4,15 +4,10 @@ variable "db_passwd" {
   description = "MariaDB root password"
 }
 
-
 variable "db_name" {
   type        = string
   default     = "prestashop-master"
   description = "MariaDB database name master"
-}
-
-variable "presta_shop_containers" {
-  default = ["presta-shop-1", "presta-shop-2", "presta-shop-3"]
 }
 
 variable "replica_count" {

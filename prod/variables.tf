@@ -4,6 +4,12 @@ variable "prefix" {
   default     = "prod"
 }
 
+variable "prestashop_version" {
+  description = "Version prestashop"
+  type        = string
+  default     = "8.1-apache"
+}
+
 variable "network" {
   description = "Docker network"
   type        = string
@@ -12,21 +18,20 @@ variable "network" {
 
 
 variable "db_user" {
-  description = "User pour bdd mysql"
+  description = "User pour bdd"
   type        = string
   default     = "prestashop_user"
 }
 
 variable "db_passwd" {
-  description = "Sensitive user password pour bdd mysql"
+  description = "Sensitive user password pour bdd"
   type        = string
   default     = "aze"
 }
-//TODO TRUe
 
 
 variable "db_name" {
-  description = "Nom bdd pour bdd mysql"
+  description = "Nom bdd"
   type        = string
   default     = "prestashop_db"
 }
@@ -42,7 +47,6 @@ variable "admin_passwd" {
   type        = string
   default     = "aze"
 }
-//TODO TRUE
 
 variable "replica_count" {
   description = "Nombres de réplica voulue"

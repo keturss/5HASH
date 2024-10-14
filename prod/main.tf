@@ -3,10 +3,10 @@ module "mysql" {
     
     network_name    = var.network
     container_name_prefix = var.prefix
-    db_passwd   = "prestashop"
-    db_name     = "aaaaa"
-    db_replication_password = "azeaze"
-    db_replication_user = "azezez"
+    db_passwd   = var.db_passwd
+    db_name     = var.db_name
+    db_replication_password = var.db_passwd
+    db_replication_user = var.db_user
 }
 
 module "nginx" {
@@ -23,7 +23,7 @@ module "nginx" {
 module "prestashop" {
     source = "../modules/prestashop"
     
-    prestashop_version    = "8.1-apache"
+    prestashop_version    = var.prestashop_version
     network_name          = var.network
     container_name_prefix = var.prefix
     db_passwd             = var.db_passwd

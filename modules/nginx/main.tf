@@ -8,12 +8,12 @@ resource "local_file" "nginx_config" {
 }
 
 
-
 # Image NGINX docker
 resource "docker_image" "nginx_image" {
   name = "nginx:latest"
   keep_locally = true
 }
+
 
 # Conteneur NGINX comme load balancer
 resource "docker_container" "nginx_lb_container" {
@@ -37,6 +37,3 @@ resource "docker_container" "nginx_lb_container" {
     container_path = "/etc/nginx/nginx.conf"
   }
 }
-
-
-
