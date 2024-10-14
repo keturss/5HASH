@@ -31,6 +31,20 @@ Dans le dossier `modules/` on retrouve trois composants réutilisables pour déf
 *   `variables.tf` : Contient les variables nécessaires au module. 
 
 
+#### Architecture
+
+Voici un schéma représentant l'architecture utilisé pour réaliser ce projet.
+
+![schema Architecture](./image/image.png)
+
+*   Le client est obligé de passer par le proxy Nginx afins d'interroger un service prestashop
+
+*   Quand a lui, le proxy répartis les charges à travers le nombre de service prestashop qui est répliqué.
+*   Le service prestashop quand a lui s'occupe d'aller interroger la bdd
+*   Ka relation Master-Slave de la bdd permet d'éviter une perte de données si le Master tombe (le slave reprend la main).
+
+
+
 ## Démarrage
 
 ### Prérequis
@@ -38,36 +52,21 @@ Dans le dossier `modules/` on retrouve trois composants réutilisables pour déf
 *   Terraform doit être installé sur la machine.
 *   Docker doit être installé sur la machine.
 
-### Environnement
 
-Choissisez votre environnement de déploiement :
-
-```Bash
-cd "prod"
-```
 ### Mots de Passes
 
 Avant de pouvoir déployer l'infrastructure, il faut mettre en place les variables d'environnements suivantes : 
 
 ```Bash
-export TF_VAR_admin_passwd=somesecret
-export TF_VAR_mysql_password=somesecret
-export TF_VAR_mysql_root_password=somesecret
+export TF_VAR_db_user=somesecret
+export TF_VAR_db_passwd=somesecret
 ```
-
-### Déploiement
-
-Une fois dans le dossier d'environnement voulue et les variables export, on peut commencer le déploiement de l'infrastructure par Terraform.
 
 #### Commandes Terraform 
 
-1. **Initialisez le projet pour télécharger les plugins**
+1. **Initialisez le projet**
 ```Bash
 terraform init
-```
-2. **Visualiser le plan d'exécution**
-```Bash
-terraform plan
 ```
 3. **Déploiement de l'infrastructure**
 ```Bash
@@ -77,23 +76,3 @@ terraform deploy
 ```Bash
 terraform destroy
 ```
-
-#### Scalabilités et Variables
-
-Il est possible d'augmenter et de réduire le nombre de ressource pour chaques modules depuis le dossier d'environnement : 
-
-*   Par le fichier `main.tf` pour modifier le nombre de réplicat MySQL : modification de la ligne `mysql_replica_count`
-
-*   Par le fichier `variables.tf` pour modifier le nombre de réplicat des NGNIX et PrestaShop : modification de la variable `replica_count`
-
-*   Vous pouvez modifier toutes autres variables dans le `main.tf` ou le `variables.tf` pour modifier les valeurs de l'infrastructure. 
-
-Une fois les valeurs modifiées, il vous suffira de faire un : 
-```Bash
-terraform plan
-```
-Pour visualiser les modifications et enfin :
-```Bash
-terraform deploy
-```
-Pour déployé la nouvelle infrastructure
